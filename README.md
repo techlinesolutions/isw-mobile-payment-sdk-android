@@ -4,8 +4,7 @@ This library aids in processing payment through the following channels
 - [x] Card
 - [x] Verve Wallet
 - [x] QR Code
-- [ ] USSD (Coming soon)
-- [ ] PAYCODE (Coming soon)
+- [X] USSD
 
 
 # Usage

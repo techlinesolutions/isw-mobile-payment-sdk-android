@@ -30,7 +30,7 @@ allprojects {
     ext {
         csv = 28
         btv = '28.0.3'
-        msv = 15
+        msv = 16
         tsv = 29
         versionCode = 1
 

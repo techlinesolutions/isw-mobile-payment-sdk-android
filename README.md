@@ -48,7 +48,7 @@ now build the project.
 
 
 #### Configuration
-You would also need to configure the project with your merchant credentials, and if you would like to customize the colors you would need to override the resource values.
+You would also need to configure the project with your merchant credentials.
 
 ```java
 
@@ -72,7 +72,7 @@ public class MyApplication extends Application {
                         merchantKey, merchantCode, "566");
 
         // uncomment to set environment, default is Environment.TEST
-        // config.setEnv(Environment.SANDBOX);
+        // config.setEnv(Environment.PRODUCTION);
         
         // initialize sdk at boot of application
         IswMobileSdk.initialize(this, config);
@@ -83,10 +83,10 @@ Once the SDK has been initialized, you can then perform transactions.
 
 
 #### Performing Transactions
-You can perform a transaction, once the SDK is configured, like so:
+You can perform a transaction, once the SDK is configured, by providing the payment info and a payment callback, like so:
 
 ```java
-    public class PurchaseActivity extends AppCompatActivity {
+    public class PurchaseActivity extends AppCompatActivity implements IswMobileSdk.IswPaymentCallback  {
         
         @Override
         protected void onCreate() {
@@ -96,37 +96,44 @@ You can perform a transaction, once the SDK is configured, like so:
             });
         }
         
+        
+        @Override
+        public void onUserCancel() {
+            // called when the user cancels
+        }
+    
+        @Override
+        public void onPaymentCompleted(IswPaymentResult result) {
+            // called when the transaction was completed (success/failure)
+        }
+        
         private void initiatePayment() {
             // set customer info
             String customerId = "<customer-id>",
                     customerName = "<customer-name>",
                     customerEmail = "<customer.email@domain.com>",
                     customerMobile = "<customer-phone>",
-
-                    // txn info
-                    // Naira's currency code
-                    currencyCode = "566",
                     // generate a unique random
                     // reference for each transaction
                     reference = "<your-unique-ref>";
                         
             // amount in kobo e.g. "N500.00" -> 50000
-            int amount = providedAmount; // e.g. 50000
+            long amount = providedAmount; // e.g. 50000
                 
             // create payment info
             IswPaymentInfo iswPaymentInfo = new IswPaymentInfo(customerId,
                     customerName, customerEmail, customerMobile,
                     currencyCode, reference, amount);
 
-            // trigger payment
-            IswMobileSdk.getInstance().pay(this, iswPaymentInfo);
+            // trigger payment with info and payment-callback
+            IswMobileSdk.getInstance().pay(iswPaymentInfo, this);
         }
         
     }
 
 ```
 #### Handling Result
-To handle result all you need to do is override on activity result and extract the intent sent back to generate `IswPaymentResult`
+To handle result all you need to do is handle the result in the callback methods: whenever the user cancels, `IswPaymentCallback.onUserCancel` is called, and when the transaction is complete, `IswPaymentCallback.onPaymentCompleted` is called with the result: an instance of `IswPaymentResult`
 
 | Field                 | Type          | meaning  |   
 |-----------------------|---------------|----------|
@@ -141,20 +148,19 @@ To handle result all you need to do is override on activity result and extract t
 
 ```java
 
-public class PurchaseActivity extends AppCompatActivity {
+public class PurchaseActivity extends AppCompatActivity implements IswMobileSdk.IswPaymentCallback  {
     // ... other stuff
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == IswMobileSdk.CODE_PAYMENT) {
-            if (resultCode == Activity.RESULT_CANCELED) {
-                toast("You cancelled payment, please try again.");
-            } else if (resultCode == Activity.RESULT_OK) {
-                IswPaymentResult result = IswMobileSdk.getResult(data);
-                if (result.isSuccessful) toast("successful: " + result.channel.name());
-                else toast("failed, try again later");
-            }
-        }
+    public void onUserCancel() {
+        toast("You cancelled payment, please try again.");
+    }
+
+    @Override
+    public void onPaymentCompleted(IswPaymentResult result) {
+        if (result.isSuccessful)
+            toast("your payment was successful, using: " + result.channel.name());
+        else toast("unable to complete payment at the moment, try again later");
     }
 
     private void toast(String msg) {

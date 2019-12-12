@@ -17,7 +17,7 @@ import com.interswitchng.iswmobilesdk.shared.models.core.IswPaymentResult;
 
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IswMobileSdk.IswPaymentCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +33,12 @@ public class MainActivity extends AppCompatActivity {
                         customerName = "James Emmanuel",
                         customerEmail = "kenneth.ngedo@gmail.com",
                         customerMobile = "08031149929",
-
-                        // txn details
-                        currencyCode = "566",
                         reference = "your-unique-ref" + new Date().getTime();
 
                 EditText etAmount = findViewById(R.id.amount);
 
 
-                int amount;
+                long amount;
                 String amtString = etAmount.getText().toString();
 
                 // initialize amount
@@ -50,34 +47,28 @@ public class MainActivity extends AppCompatActivity {
 
                 // create payment info
                 IswPaymentInfo iswPaymentInfo = new IswPaymentInfo(customerId,
-                        customerName, customerEmail, customerMobile,
-                        currencyCode, reference, amount);
+                        customerName, customerEmail, customerMobile, reference, amount);
 
 
                 // trigger payment
-                IswMobileSdk.getInstance().pay(MainActivity.this, iswPaymentInfo);
+                IswMobileSdk.getInstance().pay(iswPaymentInfo, MainActivity.this);
             }
         });
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == IswMobileSdk.CODE_PAYMENT) {
-            if (resultCode == Activity.RESULT_CANCELED) {
-                toast("You cancelled payment, please try again.");
-            } else if (resultCode == Activity.RESULT_OK) {
-                IswPaymentResult result = IswMobileSdk.getResult(data);
-                if (result.isSuccessful)
-                    toast("your payment was successful, using: " + result.channel.name());
-                else toast("unable to complete payment at the moment, try again later");
-            }
-        }
-
-    }
-
     private void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onUserCancel() {
+        toast("You cancelled payment, please try again.");
+    }
+
+    @Override
+    public void onPaymentCompleted(IswPaymentResult result) {
+        if (result.isSuccessful)
+            toast("your payment was successful, using: " + result.channel.name());
+        else toast("unable to complete payment at the moment, try again later");
     }
 }

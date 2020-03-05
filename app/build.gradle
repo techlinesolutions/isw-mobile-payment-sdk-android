@@ -15,7 +15,7 @@ android {
         // set merchant details
         buildConfigField("String", "MERCHANT_ID", merchantId)
         buildConfigField("String", "MERCHANT_KEY", merchantKey)
-        buildConfigField("String", "MERCHANT_CODE", merchantCode)
+        buildConfigField("String", "MERCHANT_CODE", "MX15513")
     }
 
     buildTypes {

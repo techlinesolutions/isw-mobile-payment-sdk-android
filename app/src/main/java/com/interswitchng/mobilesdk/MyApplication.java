@@ -1,6 +1,7 @@
 package com.interswitchng.mobilesdk;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -30,7 +31,7 @@ public class MyApplication extends Application {
         IswSdkConfig config = new IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
 
         // uncomment to set environment, default is Environment.TEST
-        // config.setEnv(Environment.SANDBOX);
+         config.setEnv(Environment.SANDBOX);
 
         IswMobileSdk.initialize(this, config);
     }
@@ -44,7 +45,7 @@ public class MyApplication extends Application {
             // Show dialog to allow users to install, update, or otherwise enable Google Play services.
             // GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
         } catch (GooglePlayServicesNotAvailableException e) {
-            // Log.e("SecurityException", "Google Play Services not available.");
+             Log.e("SecurityException", "Google Play Services not available.");
         }
     }
 }

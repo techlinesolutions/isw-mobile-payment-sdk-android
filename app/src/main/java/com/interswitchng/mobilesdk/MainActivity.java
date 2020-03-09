@@ -29,11 +29,11 @@ public class MainActivity extends AppCompatActivity implements IswMobileSdk.IswP
             @Override
             public void onClick(View view) {
                 // get customer details
-                String customerId = "your+customer+id",
+                String customerId = "12345",
                         customerName = "James Emmanuel",
                         customerEmail = "kenneth.ngedo@gmail.com",
                         customerMobile = "08031149929",
-                        reference = "your-unique-ref" + new Date().getTime();
+                        reference = "12345678" + new Date().getTime();
 
                 EditText etAmount = findViewById(R.id.amount);
 

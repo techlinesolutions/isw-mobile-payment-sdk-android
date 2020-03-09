@@ -1,21 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion csv
+    compileSdkVersion 29
     buildToolsVersion btv
 
     defaultConfig {
         applicationId "com.interswitchng.mobilesdk"
-        minSdkVersion msv
-        targetSdkVersion tsv
-        versionCode versionCode
-        versionName versionName
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // set merchant details
-        buildConfigField("String", "MERCHANT_ID", merchantId)
-        buildConfigField("String", "MERCHANT_KEY", merchantKey)
-        buildConfigField("String", "MERCHANT_CODE", "MX15513")
+        buildConfigField("String", "MERCHANT_ID", "\"IKIAA482B2CB820BE88603AA7078C3AE900AFE5FEA2A\"")
+        buildConfigField("String", "MERCHANT_KEY", "\"dS3Ho5TPjg8GoWN1/vhH7yT3cABGHbNz20OuO0bk0b4=\"")
+        buildConfigField("String", "MERCHANT_CODE", "\"MX15513\"")
     }
 
     buildTypes {

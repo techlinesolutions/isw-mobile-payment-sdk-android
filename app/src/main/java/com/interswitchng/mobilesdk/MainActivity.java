@@ -1,12 +1,9 @@
 package com.interswitchng.mobilesdk;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,6 +15,8 @@ import com.interswitchng.iswmobilesdk.shared.models.core.IswPaymentResult;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements IswMobileSdk.IswPaymentCallback {
+
+    private static final String TAG = "MAIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,11 @@ public class MainActivity extends AppCompatActivity implements IswMobileSdk.IswP
                 IswPaymentInfo iswPaymentInfo = new IswPaymentInfo(customerId,
                         customerName, customerEmail, customerMobile, reference, amount);
 
-
+                Log.d(TAG, "onClick: About to Pay");
+                Log.d(TAG, "onClick: amount: "+ iswPaymentInfo.amountString);
+                Log.d(TAG, "onClick: email: "+ iswPaymentInfo.customerEmail);
+                Log.d(TAG, "onClick: mobile: "+ iswPaymentInfo.customerMobile);
+                Log.d(TAG, "onClick: name: "+ iswPaymentInfo.customerName);
                 // trigger payment
                 IswMobileSdk.getInstance().pay(iswPaymentInfo, MainActivity.this);
             }

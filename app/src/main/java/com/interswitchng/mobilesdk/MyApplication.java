@@ -31,7 +31,7 @@ public class MyApplication extends Application {
         IswSdkConfig config = new IswSdkConfig(merchantId, merchantKey, merchantCode, "566");
 
         // uncomment to set environment, default is Environment.TEST
-         config.setEnv(Environment.SANDBOX);
+         config.setEnv(Environment.TEST);
 
         IswMobileSdk.initialize(this, config);
     }
